@@ -53,7 +53,8 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 
 ## Plan / status
 - [x] Repo scaffold; `csv-dashboard` and `regex-workbench` written
-- [ ] FarmShare setup; run `sandbox-scout` to record the libraries available there
+- [x] FarmShare scripts written (`farmshare/`: studio.sbatch auto-starts Studio + emails on start, prefetch_models.sh)
+- [ ] FarmShare setup (job queued; GPUs busy as of 2026-11-06); run `sandbox-scout` to record the libraries available there
 - [ ] Test those 2 skills on 1 small model (e.g. gemma-4-E4B) and 1 big model; adjust the protocol
 - [ ] Write `jsonl-dataset-stats`, `git-log-digest`, `unit-and-date-calc`, `pip-then-plot`
 - [ ] Run the full table: ≥4 models, both prompt types, all skills enabled together

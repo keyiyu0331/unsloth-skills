@@ -18,7 +18,7 @@ More are planned: `jsonl-dataset-stats`, `git-log-digest`, `unit-and-date-calc`,
 Studio reads skills from `~/.agents/skills/<name>/SKILL.md`. Clone this repo and link each skill into that folder:
 
 ```bash
-git clone https://github.com/<you>/unsloth-skills ~/unsloth-skills
+git clone https://github.com/keyiyu0331/unsloth-skills ~/unsloth-skills
 mkdir -p ~/.agents/skills
 for d in ~/unsloth-skills/skills/*/; do ln -sfn "$d" ~/.agents/skills/$(basename "$d"); done
 ```
