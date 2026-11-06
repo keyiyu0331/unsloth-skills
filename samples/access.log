@@ -1,0 +1,6 @@
+192.168.1.10 - - [06/Nov/2026:10:15:32 +0000] "GET /api/models HTTP/1.1" 200 5123
+10.0.0.4 - alice [06/Nov/2026:10:15:40 +0000] "POST /api/inference/chat HTTP/1.1" 200 88211
+172.16.5.2 - - [06/Nov/2026:10:16:02 +0000] "GET /favicon.ico HTTP/1.1" 404 0
+10.0.0.4 - alice [06/Nov/2026:10:16:10 +0000] "DELETE /api/skills/old-skill HTTP/1.1" 204 0
+# comment line that must not match
+malformed line without a request
