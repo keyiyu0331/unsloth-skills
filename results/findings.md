@@ -20,7 +20,7 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
 
 ## F2: The small model skips the skill's reference file and writes its own code
 
-- **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (a).
+- **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (a), on both v1 and v2. With the `@` mention (prompt b) it read `reference.md` both times.
 - **What happened:** step 2 of SKILL.md says to run the profiling script in `reference.md`. The model never called `read_skill(resource="reference.md")`. It wrote its own `csv` + pandas script instead, and the dashboard still came out correct.
 - **Why it matters:**
   - Multi-file skills only help if the model opens the files they point to.
@@ -34,7 +34,7 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
 - **What happened:** the model followed the template exactly, but the React preview reported `Compile error at line 4, column 722: Unexpected token`. Line 4 is `const DATA = {...}`, which the model retyped from the Python output as a single line of 700+ characters.
 - **Cause (confirmed):** the data was copied correctly, but the line ends `}}};` where it should end `}};`: one extra closing brace, exactly at column 722 of the 723-character line. Removing it makes the line valid. This is a transcription slip on a very long line.
 - **Skill fix applied in csv-dashboard v2:** the script now prints the finished `const DATA = {...};` block, pretty-printed over about 80 short lines and ending in `};`. SKILL.md says to copy it exactly, without adding or removing brackets.
-- **Result:** E4B prompt (b) on v2 rendered correctly on the first try. Prompt (a) on v2 is still to run.
+- **Result:** E4B prompt (b) on v2 rendered correctly on the first try. Prompt (a) on v2 never reached the fix, because the model skipped `reference.md` again (F2). It still rendered, with its own hand-typed data.
 - **Studio side:** the error card's "Fix with the model" button recovered it. After one click the dashboard rendered. So Studio's repair loop handles this class of slip well; the v2 skill fix aims to avoid the error in the first place.
 
 ## Sandbox inventory (Colab T4, Studio main, 2026-11-06)
