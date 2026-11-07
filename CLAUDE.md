@@ -32,7 +32,7 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 - **`@skill-name`** in the user message force-loads the full SKILL.md (`skill_mentions.py`).
 - **Tools:**
   - `python` and `terminal`: run in a sandbox with a 300 s timeout and a persistent working folder per chat. The network is open.
-  - `render_html`: a self-contained HTML document shown in an iframe with a strict content security policy. At most once per reply.
+  - `render_html`: NOT available from the Studio UI since #12804 (Canvas removed). The UI never puts it in `enabled_tools`. HTML renders from a ```` ```html ```` block in the reply instead.
   - A ```` ```jsx ```` / ```` ```tsx ```` block in the reply is compiled into a React preview. It must `export default` a component (or define `App`). The only importable packages are react, recharts, lucide-react, motion/framer-motion, plus Tailwind classes.
 
 ## Where things run
@@ -85,6 +85,7 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 ## Skill revisions
 - `v1`: first versions, used for the first E4B runs.
 - `csv-dashboard` `v2`: the profiling script prints a ready-to-paste multi-line `const DATA = ...;` (fix for F3).
+- `regex-workbench` `v2`: html code block instead of render_html (F1). Was never run on v1.
 - Record the revision in the `skill_rev` column of `results.csv`. Compare models only on the same revision.
 
 ## Conventions

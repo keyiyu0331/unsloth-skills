@@ -3,20 +3,22 @@
 Observations from the model × skill runs that may lead to skill fixes, issues or PRs.
 Each finding lists the runs that show it. Only promote a finding to an issue after it shows up on more than one model, or with a clear Studio-side cause.
 
-## F1: The small model treats a skill as a callable function and skips its steps
+## F1: Skills that call `render_html` can't work, because Studio no longer offers that tool
 
-- **Seen in:** gemma-4-E4B-it UD-Q4_K_XL, `sandbox-scout` prompt (a), Colab T4, 2026-11-06.
-- **What happened:**
-  1. The model read `SKILL.md` correctly.
-  2. Its reasoning then said: "I should now use the actual `sandbox-scout` skill (which is available as a function…)". It also said step 4 `render_html` was "implicitly done by the skill implementation".
-  3. It called `read_skill(name="sandbox-scout", resource="sandbox-scout")`, which returned `Error: Skill resource 'sandbox-scout' was not found.`
-  4. It ran steps 1–3 and 5 itself, but never called `render_html`.
-- **Why it matters:** it confuses "skill" (instructions the model must carry out) with "tool" (something that runs for it). Any step the model believes the skill does "for it" gets skipped.
-- **Possible fixes, still to evaluate:**
-  - (a) Skill wording: "You must perform every step yourself; this skill is instructions, not a function."
-  - (b) Studio: the skill guidance in `_skill_tool_tip` (`studio/backend/routes/inference.py`) could say this once for all skills.
-  - (c) Studio: the `read_skill` "not found" error could list the skill's real files, so the model can recover.
-- **Next:** check whether gemma-4-12B and Qwen3.5-4B do the same. If more than one model does, (b) and (c) are PR candidates.
+- **Seen in:** gemma-4-E4B-it, `sandbox-scout` prompts (a) and (b). In both runs step 4 (`render_html` card grid) never happened.
+- **Root cause (verified in code, upstream main 41da0b13f2):**
+  - The chat UI sends an explicit `enabled_tools` list. With Tools on, that list is `python, terminal, edit_file, view_image` plus skill and browser tools (`studio/frontend/src/features/chat/api/code-tool-placement.ts:35`, `chat-adapter.ts`).
+  - The backend filters `ALL_TOOLS` by that list (`studio/backend/routes/inference.py`, `tools = [t for t in ALL_TOOLS if ... in payload.enabled_tools]`). So `render_html` is never in the model's tools.
+  - Commit 6a1ca4315d, "Studio: open chat HTML in the Browser and remove Canvas" (#12804, 2026-10-06), removed Canvas mode and the render_html prompt. HTML now renders from an ```` ```html ```` code block in the reply.
+- **What the model did:**
+  - In (a) it rationalised the missing tool: it said render_html was "implicitly done by the skill implementation" and tried to call the skill as a function, which produced `Error: Skill resource 'sandbox-scout' was not found.`
+  - In (b) it silently put the verdict in the text.
+  - Both are reasonable reactions to an instruction that names a tool it doesn't have.
+- **Impact:** the maintainer's example `sandbox-scout` (and possibly `train-replay`) still says "Call render_html". Any community skill written from those examples will hit this.
+- **Fixes:**
+  - (a) Skills: replace "call render_html" with "reply with one ```` ```html ```` code block". Done in regex-workbench v2. Suggest the same for sandbox-scout upstream.
+  - (b) Studio, issue/PR candidate: `render_html` is still in `ALL_TOOLS` and the backend nudge text, but the UI can't enable it. Either drop it from the backend, or have `read_skill` / the skill tip tell the model that HTML renders from an ```` ```html ```` block.
+  - (c) Studio: the `read_skill` "not found" error could list the skill's real files, so the model can recover. A minor, separate issue.
 
 ## F2: The small model skips the skill's reference file and writes its own code
 

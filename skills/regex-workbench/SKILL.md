@@ -1,7 +1,7 @@
 ---
 name: regex-workbench
 description: Write, test and explain a regular expression against sample text, then show a match table. Use when the user asks for a regex, pattern matching, extracting fields from log lines or text, or why a regex does not match.
-compatibility: Needs the python and render_html tools.
+compatibility: Needs the python tool. Renders through an html code block in the reply (Studio shows it as a page).
 metadata:
   languages: python, html
   libraries: python stdlib (re, json, html)
@@ -36,9 +36,9 @@ print(json.dumps({"pattern": PATTERN, "ok": all(r["expected"] == r["matched"] fo
 ```
 
 4. **Fix and rerun until `"ok": true`, at most 4 tries.** If it still fails after 4 tries, say which lines fail and why.
-5. **Call `render_html` once** with the HTML template below. Fill one table row per line in `rows`: green for a correct result, red for a wrong one. The table columns are line, expected, matched, plus one column per named group. Escape `<`, `>` and `&` in the text.
+5. **Show the match table as ONE fenced code block with the language `html`.** Studio displays an html code block as a page; there is no `render_html` tool. Use the HTML template below and fill one table row per line in `rows`: green for a correct result, red for a wrong one. The table columns are line, expected, matched, plus one column per named group. Escape `<`, `>` and `&` in the text.
 6. **Reply with:**
-   - the final pattern in a code block
+   - the final pattern in a code block (after the html block)
    - one bullet per part of the pattern, explaining it
    - Python and JavaScript usage one-liners
 
@@ -62,4 +62,4 @@ tr.ok td:first-child{border-left:4px solid #34d399} tr.bad td:first-child{border
 | Language | Libraries | Where |
 |---|---|---|
 | Python | stdlib `re`, `json` | testing in the sandbox |
-| HTML/CSS | none | `render_html` canvas |
+| HTML/CSS | none | html code block, rendered by Studio |

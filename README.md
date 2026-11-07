@@ -9,7 +9,7 @@ Context: unslothai/unsloth#14181 (comment thread on testing custom skills).
 | Skill | What it does | Languages | Libraries | Output |
 |---|---|---|---|---|
 | [`csv-dashboard`](skills/csv-dashboard/SKILL.md) | CSV → dashboard with KPI cards and charts | Python, JSX | pandas or stdlib csv, react, recharts | React preview |
-| [`regex-workbench`](skills/regex-workbench/SKILL.md) | Write, test and explain a regex, with a match table | Python, HTML | stdlib `re` | `render_html` canvas |
+| [`regex-workbench`](skills/regex-workbench/SKILL.md) | Write, test and explain a regex, with a match table | Python, HTML | stdlib `re` | html code block (Studio renders it) |
 
 More are planned: `jsonl-dataset-stats`, `git-log-digest`, `unit-and-date-calc`, `pip-then-plot`.
 
@@ -42,7 +42,7 @@ Values: `y` ✅, `partial` ⚠️, `n` ❌, `wrong` 🔀 (picked a different ski
 | `libs_ok` | every library/runtime the skill uses was available, or pip installed it | a fallback was needed | a needed library was missing and the run failed |
 | `rendered` | the visual output the skill asks for appeared and shows the real data | something appeared but is broken or off-spec: blank or errored preview, missing charts, HTML/JSX shown as code instead of rendered, made-up numbers, or a different format from the one asked | no visual at all, although the skill requires one (`na` if the skill only asks for text) |
 
-Expected visual output per skill: `sandbox-scout` → `render_html` card grid · `train-replay` → React dashboard · `csv-dashboard` → React (```` ```jsx ````) dashboard · `regex-workbench` → `render_html` match table.
+Expected visual output per skill: `sandbox-scout` → `render_html` card grid (impossible in current Studio, see F1) · `train-replay` → React dashboard · `csv-dashboard` → React (```` ```jsx ````) dashboard · `regex-workbench` → ```` ```html ```` match table.
 
 To generate the table:
 
