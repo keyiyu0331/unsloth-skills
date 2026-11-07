@@ -67,12 +67,10 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 - [ ] File issues/PRs for bugs (branch off an up-to-date `main` in the fork; title prefix `Studio:`; add tests)
 - [ ] Publish this repo; post the summary, table and links on #14181; nominate 1–2 default skills
 
-## Where we left off (2026-11-06)
-- Testing on Colab T4, model gemma-4-E4B-it UD-Q4_K_XL, Thinking on, Search off, Approve-for-me on, 4 skills enabled.
-- Done for E4B: sandbox-scout (a); csv-dashboard (a) and (b) on v1 and v2.
-- Still to do for E4B: sandbox-scout (b), regex-workbench (a) and (b). Stats (total/tokens) are missing for the two csv-dashboard v2 rows.
-- Larger model: unsloth/gemma-4-12B-it-qat-GGUF UD-Q4_K_XL (the maintainer's reference).  Context: Studio default for each model (E4B 131072, 12B-qat 262144); left unchanged. Only two models due to time: E4B (small) vs 12B (larger). 26B+ does not fit a T4. A first 12B regex (a) run used the non-QAT gemma-4-12b-it by mistake and was deleted.
-- Findings so far: F1, F2 and F3 in results/findings.md.
+## Where we left off (2026-11-06, late)
+- All runs done for both models: gemma-4-E4B-it (small) and gemma-4-12B-it-qat (larger), 3 skills x (a)/(b). Table: `python scripts/make_table.py`.
+- Findings F1-F5 in results/findings.md. Headline: E4B picks skills unprompted more often (2/3) than 12B (0/3); 12B executes better once @-loaded.
+- Next: write-up for #14181 (README table + summary); decide on fixes (skill v3: inline reference script, escape pattern in html heading); possible Studio issue/PR for F1 (render_html stale) and F4/F5 (catalog wording). Nothing posted yet; ask the user before posting.
 
 ## Restarting Colab (everything there is wiped between sessions)
 1. Runtime → Change runtime type → T4 GPU.

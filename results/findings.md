@@ -20,7 +20,9 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
   - (b) Studio, issue/PR candidate: `render_html` is still in `ALL_TOOLS` and the backend nudge text, but the UI can't enable it. Either drop it from the backend, or have `read_skill` / the skill tip tell the model that HTML renders from an ```` ```html ```` block.
   - (c) Studio: the `read_skill` "not found" error could list the skill's real files, so the model can recover. A minor, separate issue.
 
-## F2: The small model skips the skill's reference file and writes its own code
+## F2: Models skip the skill's reference file and write their own code
+
+- **Update after 12B:** 12B skipped `reference.md` even with `@` on csv-dashboard (b). Across both models the reference file was read in 1 of 4 csv-dashboard v2 runs where the skill was loaded. Fix to try after the table: inline the profiling script in SKILL.md.
 
 - **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (a), on both v1 and v2. With the `@` mention (prompt b) it read `reference.md` both times.
 - **What happened:** step 2 of SKILL.md says to run the profiling script in `reference.md`. The model never called `read_skill(resource="reference.md")`. It wrote its own `csv` + pandas script instead, and the dashboard still came out correct.
@@ -48,6 +50,14 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
   - Studio side: the catalog intro or the `read_skill` tool description could say plainly that skills are instructions to read with `read_skill`, not commands or tools to run. Check the current wording in `format_skill_catalog` (`studio/backend/core/inference/skills.py`) before proposing anything.
   - Skill side: none obvious; the description already says "Use when the user asks for a regex".
 - **To check:** whether 12B and the bigger models do the same.
+
+## F5: The larger model never picked a skill unprompted
+
+- **Seen:** gemma-4-12B-it-qat, prompt (a) on all 3 skills (regex-workbench, csv-dashboard, sandbox-scout), 2026-11-06. 0 of 3 `read_skill` calls. gemma-4-E4B picked the skill in 2 of 3 (csv-dashboard, sandbox-scout) and tried to run the third as a shell command (F4).
+- **Notable because** 12B is above the 9B cutoff, so it gets the larger 4096-byte catalog, and all 4 descriptions fit in either budget. Catalog size is not the explanation here.
+- **Once loaded with `@`, 12B executed well:** regex-workbench (b) was the cleanest run of the table, csv-dashboard (b) rendered on the first try.
+- **Worst case:** csv-dashboard (a) on 12B looped through about 20 pandas calls writing CSVs and never produced a dashboard, while saying it had.
+- **Possible fixes to try:** stronger wording in the catalog intro ("before answering, check whether a skill matches; if so call read_skill first"); check the current text in `format_skill_catalog` (`studio/backend/core/inference/skills.py`) and `_skill_tool_tip` (`studio/backend/routes/inference.py`).
 
 ## Sandbox inventory (Colab T4, Studio main, 2026-11-06)
 
