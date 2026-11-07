@@ -32,8 +32,9 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
 
 - **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (b).
 - **What happened:** the model followed the template exactly, but the React preview reported `Compile error at line 4, column 722: Unexpected token`. Line 4 is `const DATA = {...}`, which the model retyped from the Python output as a single line of 700+ characters.
-- **Cause:** pending. Need the exact text of line 4: a transcription slip, a truncation, or a value that isn't valid JS.
-- **Possible skill fix:** have the profiling script print the finished `const DATA = ...;` line, pretty-printed over several lines, so the model copies short lines instead of one huge one. Or have it print the whole jsx block, so the model only copies text.
+- **Cause (confirmed):** the data was copied correctly, but the line ends `}}};` where it should end `}};`: one extra closing brace, exactly at column 722 of the 723-character line. Removing it makes the line valid. This is a transcription slip on a very long line.
+- **Skill fix applied in csv-dashboard v2:** the script now prints the finished `const DATA = {...};` block, pretty-printed over about 80 short lines and ending in `};`. SKILL.md says to copy it exactly, without adding or removing brackets.
+- **Next:** re-run E4B prompts (a) and (b) with v2. The v1 rows stay as the 'before' evidence.
 - **Studio side:** the error card offers "Fix with the model". Note whether that recovers.
 
 ## Sandbox inventory (Colab T4, Studio main, 2026-11-06)

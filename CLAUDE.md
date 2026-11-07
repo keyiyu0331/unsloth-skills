@@ -67,6 +67,11 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 - [ ] File issues/PRs for bugs (branch off an up-to-date `main` in the fork; title prefix `Studio:`; add tests)
 - [ ] Publish this repo; post the summary, table and links on #14181; nominate 1–2 default skills
 
+## Skill revisions
+- `v1`: first versions, used for the first E4B runs.
+- `csv-dashboard` `v2`: the profiling script prints a ready-to-paste multi-line `const DATA = ...;` (fix for F3).
+- Record the revision in the `skill_rev` column of `results.csv`. Compare models only on the same revision.
+
 ## Conventions
 - Skill bodies should be short numbered checklists that name exact tools; small models follow these best.
 - Never invent results in the table. Every cell must have evidence.

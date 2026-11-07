@@ -14,15 +14,15 @@ Follow these steps in order. Do not skip step 2.
 1. **Get the data.**
    - If the user attached a CSV, run `ls` with the terminal tool to find it in the working directory.
    - If the user pasted the data, save it as `data.csv` with the python tool.
-2. **Profile it with the python tool.** Run the profiling script in `reference.md` (call `read_skill` with `resource="reference.md"`). It prints a JSON summary with:
+2. **Profile it with the python tool.** Run the profiling script in `reference.md` (call `read_skill` with `resource="reference.md"`). It prints a ready-to-paste `const DATA = ...;` block with:
    - the columns and their types
    - row count
    - 3 to 4 KPIs
    - at most 2 chart series, each with 50 points or fewer
-3. **Check the JSON.** If a column the user cares about is missing or wrong, fix the script and run it again. Never make up numbers. Every number on the dashboard must come from the script output.
+3. **Check the output.** If a column the user cares about is missing or wrong, fix the script and run it again. Never make up numbers. Every number on the dashboard must come from the script output.
 4. **Write the dashboard as ONE fenced code block with the language `jsx`.** Use the template in `reference.md`. Rules:
    - Only import from `react` and `recharts`. No other packages, no `fetch`, no file reads.
-   - Paste the JSON from step 2 into a `const DATA = ...` at the top of the block.
+   - Copy the `const DATA = ...;` block the script printed, exactly as printed, to the top of the jsx block. Do not retype it, and do not add or remove `{` `}` `[` `]`.
    - The block must `export default function App()`.
    - Use plain inline styles, no CSS files.
 5. **Finish** with 2 or 3 sentences on what the data shows, below the code block.

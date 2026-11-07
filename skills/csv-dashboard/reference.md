@@ -56,12 +56,13 @@ if VALUE_COL:
         out["series"]["by_group"] = [{"x": k, "y": round(v, 2)} for k, v in pts]
 
 out["used"] = {"date": DATE_COL, "value": VALUE_COL, "group": GROUP_COL}
-print(json.dumps(out))
+# Print the finished line for the dashboard. Copy it exactly; do not retype or add braces.
+print("const DATA = " + json.dumps(out, indent=1) + ";")
 ```
 
 ## Dashboard template (reply with this as a ```jsx block)
 
-Replace `DATA` with the JSON the script printed. Remove a chart if its series is missing.
+Replace the `const DATA = ...;` line with the one the script printed, copied exactly as printed. Do not add or remove any `{`, `}`, `[` or `]`. Remove a chart if its series is missing.
 
 ```jsx
 import React from "react";
