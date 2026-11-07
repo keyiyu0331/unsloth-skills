@@ -25,13 +25,13 @@ def main() -> None:
         print("No results yet.")
         return
     rows.sort(key=lambda r: (r["skill"], float(r["params_b"] or 0), r["model"], r["prompt"]))
-    head = ["Skill", "Model", "Quant", "Prompt", "Picked", "read_skill", "Ref file", "Tools ran", "Libs", "Rendered", "Secs", "Notes"]
+    head = ["Skill", "Model", "Quant", "Prompt", "Picked", "read_skill", "Ref file", "Tools ran", "Libs", "Rendered", "Secs", "Tok/s", "Notes"]
     print("| " + " | ".join(head) + " |")
     print("|" + "---|" * len(head))
     for r in rows:
         cells = [r["skill"], r["model"], r["quant"], r["prompt"]]
         cells += [icon(r[c]) for c in SCORE_COLS]
-        cells += [r["seconds"], r["notes"].replace("|", "\\|")]
+        cells += [r["seconds"], r.get("tok_s", ""), r["notes"].replace("|", "\\|")]
         print("| " + " | ".join(cells) + " |")
 
 
