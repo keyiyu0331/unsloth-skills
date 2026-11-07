@@ -39,6 +39,16 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
 - **Result:** E4B prompt (b) on v2 rendered correctly on the first try. Prompt (a) on v2 never reached the fix, because the model skipped `reference.md` again (F2). It still rendered, with its own hand-typed data.
 - **Studio side:** the error card's "Fix with the model" button recovered it. After one click the dashboard rendered. So Studio's repair loop handles this class of slip well; the v2 skill fix aims to avoid the error in the first place.
 
+## F4: The small model calls a skill as a shell command instead of using `read_skill`
+
+- **Seen:** gemma-4-E4B, `regex-workbench` prompt (a), 2026-11-06. The model saved the log lines to `logs.log`, then ran `$ regex-workbench` with the terminal tool. When that failed, it said "the `regex-workbench` tool appears to be unavailable" and answered without the skill.
+- **Related:** in `sandbox-scout` (a) the same model treated the skill as a callable function and asked `read_skill` for a resource named after the skill (F1 notes).
+- **Effect:** the skill's steps were never loaded, so the regex was not tested and no html match table was produced. The pattern happened to be correct.
+- **Possible fixes:**
+  - Studio side: the catalog intro or the `read_skill` tool description could say plainly that skills are instructions to read with `read_skill`, not commands or tools to run. Check the current wording in `format_skill_catalog` (`studio/backend/core/inference/skills.py`) before proposing anything.
+  - Skill side: none obvious; the description already says "Use when the user asks for a regex".
+- **To check:** whether 12B and the bigger models do the same.
+
 ## Sandbox inventory (Colab T4, Studio main, 2026-11-06)
 
 - **Works:**
