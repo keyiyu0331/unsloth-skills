@@ -54,7 +54,7 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 ## Plan / status
 - [x] Repo scaffold; `csv-dashboard` and `regex-workbench` written
 - [x] FarmShare scripts written (`farmshare/`: studio.sbatch auto-starts Studio + emails on start, prefetch_models.sh)
-- [ ] FarmShare setup (job queued; GPUs busy as of 2026-11-06); run `sandbox-scout` to record the libraries available there
+- [ ] FarmShare setup (GPUs were busy on 2026-11-06; switched to Google Colab T4 using studio/Unsloth_Studio_Colab.ipynb plus a skills cell); run `sandbox-scout` to record the libraries available there
 - [ ] Test those 2 skills on 1 small model (e.g. gemma-4-E4B) and 1 big model; adjust the protocol
 - [ ] Write `jsonl-dataset-stats`, `git-log-digest`, `unit-and-date-calc`, `pip-then-plot`
 - [ ] Run the full table: ≥4 models, both prompt types, all skills enabled together
@@ -66,6 +66,21 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
   - the 300 s timeout
 - [ ] File issues/PRs for bugs (branch off an up-to-date `main` in the fork; title prefix `Studio:`; add tests)
 - [ ] Publish this repo; post the summary, table and links on #14181; nominate 1–2 default skills
+
+## Where we left off (2026-11-06)
+- Testing on Colab T4, model gemma-4-E4B-it UD-Q4_K_XL, Thinking on, Search off, Approve-for-me on, 4 skills enabled.
+- Done for E4B: sandbox-scout (a); csv-dashboard (a) and (b) on v1 and v2.
+- Still to do for E4B: sandbox-scout (b), regex-workbench (a) and (b). Stats (total/tokens) are missing for the two csv-dashboard v2 rows.
+- Then repeat all 6 runs with gemma-4-12B-it-qat, then Qwen3.5-4B, then a bigger model.
+- Findings so far: F1, F2 and F3 in results/findings.md.
+
+## Restarting Colab (everything there is wiped between sessions)
+1. Runtime → Change runtime type → T4 GPU.
+2. Run the setup cell.
+3. Upload sandbox-scout.zip and train-replay.zip to /content.
+4. Run the skills cell: git clone this repo, symlink skills/* into ~/.agents/skills, then run the zip-install Python cell.
+5. Run start(). Use the new Cloudflare link and login.
+6. To update the skills while Studio is running, use Colab's Terminal: `cd /content/unsloth-skills && git pull`.
 
 ## Skill revisions
 - `v1`: first versions, used for the first E4B runs.
