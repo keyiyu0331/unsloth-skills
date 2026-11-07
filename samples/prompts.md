@@ -4,6 +4,12 @@ Use these word for word for every model, so the runs can be compared. Run each s
 - **(a)** the natural prompt, which tests whether the model picks the skill by itself;
 - **(b)** the same prompt starting with `@skill-name`, which forces the skill to load and tests whether the model can carry it out.
 
+## sandbox-scout (maintainer's example skill)
+No input file.
+
+- (a) `What languages, compilers and libraries can this sandbox run?`
+- (b) `@sandbox-scout What languages, compilers and libraries can this sandbox run?`
+
 ## csv-dashboard
 Attach `samples/sales.csv`, or paste its contents after the prompt.
 
