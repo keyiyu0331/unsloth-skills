@@ -18,6 +18,16 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
   - (c) Studio: the `read_skill` "not found" error could list the skill's real files, so the model can recover.
 - **Next:** check whether gemma-4-12B and Qwen3.5-4B do the same. If more than one model does, (b) and (c) are PR candidates.
 
+## F2: The small model skips the skill's reference file and writes its own code
+
+- **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (a).
+- **What happened:** step 2 of SKILL.md says to run the profiling script in `reference.md`. The model never called `read_skill(resource="reference.md")`. It wrote its own `csv` + pandas script instead, and the dashboard still came out correct.
+- **Why it matters:**
+  - Multi-file skills only help if the model opens the files they point to.
+  - Here SKILL.md alone was enough, which suggests short skills with inlined essentials hold up better on small models.
+  - It also means the template's styling and the column-guessing logic were ignored.
+- **Next:** check whether bigger models read `reference.md`, and whether the `@csv-dashboard` prompt (b) changes this. If small models never open extra files, the skill-writing advice is: inline anything critical in SKILL.md.
+
 ## Sandbox inventory (Colab T4, Studio main, 2026-11-06)
 
 - **Works:**
