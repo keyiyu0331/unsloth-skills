@@ -17,7 +17,9 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
 - **Impact:** the maintainer's example `sandbox-scout` (and possibly `train-replay`) still says "Call render_html". Any community skill written from those examples will hit this.
 - **Fixes:**
   - (a) Skills: replace "call render_html" with "reply with one ```` ```html ```` code block". Done in regex-workbench v2. Suggest the same for sandbox-scout upstream.
-  - (b) Studio, issue/PR candidate: `render_html` is still in `ALL_TOOLS` and the backend nudge text, but the UI can't enable it. Either drop it from the backend, or have `read_skill` / the skill tip tell the model that HTML renders from an ```` ```html ```` block.
+  - (b) ~~Studio: drop `render_html` from the backend.~~ Withdrawn. #12804 removed the tool request from the UI on purpose, and the backend keeps the tool for API clients (an omitted `enabled_tools` means all tools, `routes/inference.py` ~L4853) and for old chats (`thread.tsx`, `html-fences.ts`).
+  - (b') Studio follow-up instead: a line in the bundled `skill-creator` telling skill authors to use an ```` ```html ```` or ```` ```jsx ```` block for visual output (proposed PR B in REPORT.md).
+- **Where the fix goes:** `sandbox-scout` is not in the unsloth repo (it was a zip shared on #14181; the name appears only as a test fixture in `test_skill_archive.py`). So its step 4 can only be fixed by the maintainer updating their example.
   - (c) Studio: the `read_skill` "not found" error could list the skill's real files, so the model can recover. A minor, separate issue.
 
 ## F2: Models skip the skill's reference file and write their own code
