@@ -71,7 +71,7 @@ pip install in the sandbox already works. Packages go to `<workdir>/.unsloth-pac
 - Testing on Colab T4, model gemma-4-E4B-it UD-Q4_K_XL, Thinking on, Search off, Approve-for-me on, 4 skills enabled.
 - Done for E4B: sandbox-scout (a); csv-dashboard (a) and (b) on v1 and v2.
 - Still to do for E4B: sandbox-scout (b), regex-workbench (a) and (b). Stats (total/tokens) are missing for the two csv-dashboard v2 rows.
-- Larger model: unsloth/gemma-4-12b-it-GGUF UD-Q4_K_XL (plain, NOT the QAT repo; loaded by mistake but kept for all 12B runs so they stay comparable). Only two models due to time: E4B (small) vs 12B (larger). 26B+ does not fit a T4.
+- Larger model: unsloth/gemma-4-12B-it-qat-GGUF UD-Q4_K_XL (the maintainer's reference). Only two models due to time: E4B (small) vs 12B (larger). 26B+ does not fit a T4. A first 12B regex (a) run used the non-QAT gemma-4-12b-it by mistake and was deleted.
 - Findings so far: F1, F2 and F3 in results/findings.md.
 
 ## Restarting Colab (everything there is wiped between sessions)
