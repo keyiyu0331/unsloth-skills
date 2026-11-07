@@ -22,7 +22,7 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
 
 ## F2: Models skip the skill's reference file and write their own code
 
-- **Update after 12B:** 12B skipped `reference.md` even with `@` on csv-dashboard (b). Across both models the reference file was read in 1 of 4 csv-dashboard v2 runs where the skill was loaded. Fix to try after the table: inline the profiling script in SKILL.md.
+- **Update after 12B:** 12B skipped `reference.md` even with `@` on csv-dashboard (b). Runs where csv-dashboard was loaded and `reference.md` was read: v2 1 of 3 (only E4B b), all revisions 2 of 5 (E4B b on v1 and v2). Both models also ignored Studio's instruction 'do not read an already loaded manifest again': after an `@` load they re-read SKILL.md in at least 3 of the 6 (b) runs on the current revisions (E4B sandbox-scout and regex-workbench, 12B sandbox-scout). Fix to try after the table: inline the profiling script in SKILL.md.
 
 - **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (a), on both v1 and v2. With the `@` mention (prompt b) it read `reference.md` both times.
 - **What happened:** step 2 of SKILL.md says to run the profiling script in `reference.md`. The model never called `read_skill(resource="reference.md")`. It wrote its own `csv` + pandas script instead, and the dashboard still came out correct.

@@ -50,4 +50,40 @@ To generate the table:
 python scripts/make_table.py
 ```
 
-_Table goes here._
+### Setup
+
+- **Models:** `unsloth/gemma-4-E4B-it-GGUF` (small) and `unsloth/gemma-4-12B-it-qat-GGUF` (larger), both UD-Q4_K_XL. Larger models (26B+) don't fit a free T4.
+- **Hardware:** Google Colab T4 (16 GB), Studio from `main` via `studio/Unsloth_Studio_Colab.ipynb`, 2026-11-06.
+- **Settings:** Thinking on, Search off, Tools on, run automatically, Studio's default context per model (131072 for E4B, 262144 for 12B).
+- **Skills enabled:** all 4 at once (`sandbox-scout`, `train-replay`, `csv-dashboard`, `regex-workbench`), so the model has to choose.
+- **Prompts:** fixed, in [`samples/prompts.md`](samples/prompts.md). (a) is a natural request; (b) is the same with `@skill-name`.
+- **One run per cell.** Treat single cells as anecdotes and the patterns across rows as the result.
+
+### Table (current skill revisions)
+
+| Skill | Model | Prompt | Picked | read_skill | Ref file | Tools ran | Libs | Rendered | Secs | Tok/s |
+|---|---|---|---|---|---|---|---|---|---|---|
+| csv-dashboard | E4B | a | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | 58 | 70.9 |
+| csv-dashboard | E4B | b | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 70 | 75.2 |
+| csv-dashboard | 12B | a | ❌ | – | – | ⚠️ | ✅ | ❌ | 195 | 36.4 |
+| csv-dashboard | 12B | b | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | 69 | 41.1 |
+| regex-workbench | E4B | a | ❌ | – | – | ⚠️ | – | ⚠️ | 23 | 80.3 |
+| regex-workbench | E4B | b | ✅ | ✅ | – | ✅ | ✅ | ✅ | 317* | 69.9 |
+| regex-workbench | 12B | a | ❌ | – | – | ✅ | – | ⚠️ | 47 | 40.4 |
+| regex-workbench | 12B | b | ✅ | ✅ | – | ✅ | ✅ | ✅ | 153 | 40.3 |
+| sandbox-scout | E4B | a | ✅ | ⚠️ | – | ✅ | ✅ | ❌ | 55 | 71.2 |
+| sandbox-scout | E4B | b | ✅ | ✅ | – | ✅ | ✅ | ❌ | 46 | 62.5 |
+| sandbox-scout | 12B | a | ❌ | – | – | ✅ | ✅ | ❌ | 50 | 34.4 |
+| sandbox-scout | 12B | b | ✅ | ✅ | – | ✅ | ✅ | ⚠️ | 256 | 39.3 |
+
+\* Includes time waiting for a tool approval. Earlier `csv-dashboard` v1 runs, the per-run notes and the evidence paths are in [`results/results.csv`](results/results.csv). `python scripts/make_table.py` prints the full table.
+
+### What it shows
+
+- **Picking a skill unprompted:** E4B 2 of 3, 12B 0 of 3. 12B gets the larger catalog budget, and all 4 descriptions fit either way, so catalog size doesn't explain it. On `regex-workbench` (a), E4B tried to run the skill as a shell command (`$ regex-workbench`) instead of reading it (F4, F5).
+- **Following a loaded skill:** with `@`, both models ran their tools and every run on a current revision produced its output, except `sandbox-scout`, whose `render_html` step is impossible (F1). 12B followed the steps more closely (correct colours, no stray re-read on regex); E4B was about twice as fast.
+- **Extra files:** `reference.md` was read in 2 of 5 `csv-dashboard` runs where the skill was loaded. Put anything critical in SKILL.md itself (F2).
+- **Long literals:** E4B broke a 723-character one-line JSON when copying it into JSX; printing it pretty over many lines fixed it (F3).
+- **Summaries:** both models called the revenue "upward/growth" despite the March dip in 5 of 6 `csv-dashboard` summaries. The numbers on the dashboards were all correct.
+
+Details and code references: [`results/findings.md`](results/findings.md).
