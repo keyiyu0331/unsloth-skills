@@ -28,6 +28,14 @@ Each finding lists the runs that show it. Only promote a finding to an issue aft
   - It also means the template's styling and the column-guessing logic were ignored.
 - **Next:** check whether bigger models read `reference.md`, and whether the `@csv-dashboard` prompt (b) changes this. If small models never open extra files, the skill-writing advice is: inline anything critical in SKILL.md.
 
+## F3: Copying a long one-line JSON into the jsx block breaks the compile
+
+- **Seen in:** gemma-4-E4B-it, `csv-dashboard` prompt (b).
+- **What happened:** the model followed the template exactly, but the React preview reported `Compile error at line 4, column 722: Unexpected token`. Line 4 is `const DATA = {...}`, which the model retyped from the Python output as a single line of 700+ characters.
+- **Cause:** pending. Need the exact text of line 4: a transcription slip, a truncation, or a value that isn't valid JS.
+- **Possible skill fix:** have the profiling script print the finished `const DATA = ...;` line, pretty-printed over several lines, so the model copies short lines instead of one huge one. Or have it print the whole jsx block, so the model only copies text.
+- **Studio side:** the error card offers "Fix with the model". Note whether that recovers.
+
 ## Sandbox inventory (Colab T4, Studio main, 2026-11-06)
 
 - **Works:**
