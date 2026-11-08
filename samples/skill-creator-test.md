@@ -46,12 +46,12 @@ python3 - <<'EOF'
 p = "/content/unsloth/studio/backend/core/inference/bundled_skills/skill-creator/SKILL.md"
 s = open(p).read()
 old = "Do not include secrets, credentials, or machine-specific paths."
-new = old + " If the skill should show a page, table or chart, tell the model to reply with one fenced `html` code block, or a `jsx` block that `export default`s a React component using react, recharts, lucide-react, motion or Tailwind. Unsloth renders those blocks in the chat; there is no separate render tool."
+new = old + " If the skill should show a page, table or chart in the chat, tell the model to reply with one fenced `html` code block, or a `jsx` block that `export default`s a React component using react, recharts, lucide-react, motion or Tailwind, instead of saving an image or file. Unsloth renders those blocks in the chat."
 assert s.count(old) == 1, "step 5 text not found"
 open(p, "w").write(s.replace(old, new))
 print("patched")
 EOF
-grep -c "no separate render tool" /content/unsloth/studio/backend/core/inference/bundled_skills/skill-creator/SKILL.md
+grep -c "instead of saving an image or file" /content/unsloth/studio/backend/core/inference/bundled_skills/skill-creator/SKILL.md
 ```
 
 It should print `patched`, then `1`. Studio reads skill files on every request, so no restart is needed.
